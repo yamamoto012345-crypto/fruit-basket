@@ -35,6 +35,7 @@ let best = 0;
 let lives = 0;
 let combo = 0;
 let maxCombo = 0;
+let bestCombo = 0;
 let running = false;
 let elapsed = 0;
 let untilSpawn = 0;
@@ -46,6 +47,8 @@ const scoreEl = $('score');
 const bestEl = $('best');
 const livesEl = $('lives');
 const comboEl = $('combo');
+const chainEl = $('chain');
+const overBestComboEl = $('overBestCombo');
 const startEl = $('start');
 const overEl = $('over');
 const overScoreEl = $('overScore');
@@ -67,6 +70,7 @@ function saveBest(key, v) {
 }
 
 function showBest() { bestEl.textContent = '🏆 ' + best; }
+function showChain() { chainEl.textContent = combo >= 2 ? '🔥 ' + combo + ' れんぞく' : ''; }
 function showLives() { livesEl.textContent = '❤️'.repeat(lives) + '🖤'.repeat(Math.max(0, mode.lives - lives)); }
 
 function beep(freq, slide = 2, vol = .25, type = 'sine') {
@@ -171,6 +175,7 @@ function spawn() {
     score++;
     scoreEl.textContent = '⭐ ' + score;
     showCombo();
+    showChain();
   });
 }
 
@@ -189,6 +194,7 @@ function missed(f) {
   beep(220, 0.6, .25, 'triangle');
   buzz([40, 40, 40]);
   combo = 0;
+  showChain();
   lives--;
   showLives();
   if (lives <= 0) gameOver();
@@ -230,7 +236,12 @@ function gameOver() {
   }
   overScoreEl.textContent = '⭐ ' + score;
   overBestEl.textContent = '🏆 ' + best;
-  overComboEl.textContent = '🔥 さいだい ' + maxCombo + ' れんぞく';
+  if (maxCombo > bestCombo) {
+    bestCombo = maxCombo;
+    saveBest(mode.bestKey + '-combo', bestCombo);
+  }
+  overComboEl.textContent = '🔥 こんかい ' + maxCombo + ' れんぞく';
+  overBestComboEl.textContent = '🏅 ベスト ' + bestCombo + ' れんぞく';
   newRecordEl.hidden = !(isNew && score > 0);
   retryEl.disabled = true;
   changeEl.disabled = true;
@@ -246,10 +257,12 @@ function begin(name) {
   if (name) {
     mode = MODES[name];
     best = loadBest(mode.bestKey);
+    bestCombo = loadBest(mode.bestKey + '-combo');
     showBest();
     document.body.dataset.mode = name;
   }
   clearField();
+  showChain();
   score = 0;
   combo = 0;
   maxCombo = 0;
@@ -295,6 +308,7 @@ changeEl.addEventListener('pointerdown', (e) => {
 lives = mode.lives;
 showLives();
 best = loadBest(mode.bestKey);
+bestCombo = loadBest(mode.bestKey + '-combo');
 showBest();
 
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
