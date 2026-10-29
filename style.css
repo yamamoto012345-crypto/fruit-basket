@@ -1,0 +1,186 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: linear-gradient(#bff0ff, #e8ffe0);
+  font-family: "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+#hud {
+  position: fixed;
+  top: calc(10px + env(safe-area-inset-top));
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: clamp(26px, 6vw, 56px);
+  font-weight: bold;
+  color: #ff5c8a;
+  text-shadow: 3px 3px 0 #fff;
+  z-index: 5;
+  pointer-events: none;
+}
+#best { color: #ff9f1c; }
+#lives { letter-spacing: .05em; }
+
+#combo {
+  position: fixed;
+  top: 18%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: clamp(36px, 9vw, 90px);
+  font-weight: bold;
+  color: #ff9f1c;
+  text-shadow: 4px 4px 0 #fff;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 4;
+}
+#combo.show { animation: comboPop .45s ease-out; }
+@keyframes comboPop {
+  0% { opacity: 1; transform: scale(.6); }
+  30% { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 0; transform: scale(1); }
+}
+
+/* ここに つくまえに タッチ、の めじるし */
+#floor {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 14px;
+  background: repeating-linear-gradient(45deg, #ff5c8a 0 18px, #fff 18px 36px);
+  opacity: .8;
+  z-index: 3;
+  pointer-events: none;
+}
+
+#start, #over {
+  position: fixed;
+  inset: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9;
+}
+#start { display: flex; }
+#over { display: none; background: rgba(255, 255, 255, .55); }
+
+.big {
+  font-size: clamp(40px, 10vw, 100px);
+  font-weight: bold;
+  text-align: center;
+  color: #fff;
+  text-shadow: 4px 4px 0 #ff9f1c;
+}
+.small {
+  margin-top: 14px;
+  font-size: clamp(18px, 4vw, 36px);
+  text-align: center;
+  color: #ff5c8a;
+  text-shadow: 2px 2px 0 #fff;
+}
+.small.hint { font-size: clamp(14px, 3vw, 26px); color: #7a3cff; margin-top: 30px; }
+
+#newRecord {
+  margin-top: 10px;
+  font-size: clamp(28px, 6vw, 56px);
+  font-weight: bold;
+  color: #ff5c8a;
+  text-shadow: 2px 2px 0 #fff;
+  animation: pop .6s ease-in-out infinite alternate;
+}
+#newRecord[hidden] { display: none; }
+@keyframes pop { to { transform: scale(1.15); } }
+
+.result {
+  margin-top: 8px;
+  font-size: clamp(40px, 9vw, 84px);
+  font-weight: bold;
+  color: #ff5c8a;
+  text-shadow: 3px 3px 0 #fff;
+}
+.result.best { color: #ff9f1c; }
+.result.time { font-size: clamp(28px, 6vw, 56px); color: #4a8fb8; }
+
+#retry {
+  margin-top: 24px;
+  padding: .4em 1.2em;
+  font-family: inherit;
+  font-size: clamp(30px, 7vw, 64px);
+  font-weight: bold;
+  color: #fff;
+  background: #ff5c8a;
+  border: 0;
+  border-radius: 999px;
+  box-shadow: 0 8px 0 #c93a64;
+  cursor: pointer;
+}
+#retry:disabled { opacity: .5; }
+#retry:active:not(:disabled) { transform: translateY(6px); box-shadow: 0 2px 0 #c93a64; }
+
+.modes { display: flex; gap: 5vw; margin-top: 40px; }
+.modeBtn {
+  padding: .3em .9em;
+  font-family: inherit;
+  font-size: clamp(28px, 7vw, 64px);
+  font-weight: bold;
+  line-height: 1.3;
+  color: #fff;
+  border: 0;
+  border-radius: 28px;
+  cursor: pointer;
+}
+.modeBtn.kid { background: #ffb703; box-shadow: 0 8px 0 #c98700; }
+.modeBtn.adult { background: #7a3cff; box-shadow: 0 8px 0 #4d20b5; }
+.modeBtn:active { transform: translateY(6px); box-shadow: 0 2px 0 rgba(0, 0, 0, .3); }
+
+#change {
+  margin-top: 18px;
+  padding: .3em 1em;
+  font-family: inherit;
+  font-size: clamp(20px, 4.5vw, 40px);
+  font-weight: bold;
+  color: #4a8fb8;
+  background: #fff;
+  border: 3px solid #4a8fb8;
+  border-radius: 999px;
+  cursor: pointer;
+}
+#change:disabled { opacity: .5; }
+
+body[data-mode="adult"] { background: linear-gradient(#2b2a5c, #6a5acd); }
+body[data-mode="adult"] #hud { text-shadow: 3px 3px 0 #1d1c44; }
+
+/* くだもの：見た目より大きめの当たり判定（padding）で、小さい手でも取りやすい */
+.f {
+  position: absolute;
+  top: 0;
+  line-height: 1;
+  padding: .25em;
+  cursor: pointer;
+  will-change: transform;
+  filter: drop-shadow(0 4px 3px rgba(0, 0, 0, .25));
+}
+
+.p {
+  position: absolute;
+  font-size: 30px;
+  pointer-events: none;
+  z-index: 6;
+  transition: transform .7s ease-out, opacity .7s;
+}
+.miss {
+  position: absolute;
+  font-size: 40px;
+  pointer-events: none;
+  z-index: 6;
+  transition: transform .7s ease-out, opacity .7s;
+}

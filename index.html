@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+<title>くだものキャッチ</title>
+<meta name="description" content="うえから おちてくる くだものを タッチ！ したに おちる まえに とろう。ようじモード／おとなモード" />
+<meta name="theme-color" content="#7bd957" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="icons/icon.svg" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="hud">
+    <div id="score">⭐ 0</div>
+    <div id="lives">❤️❤️❤️</div>
+    <div id="best">🏆 0</div>
+  </div>
+  <div id="combo"></div>
+  <div id="floor"></div>
+
+  <div id="start">
+    <div class="big">くだものキャッチ</div>
+    <div class="small">うえから おちてくる くだものを タッチ！</div>
+    <div class="modes">
+      <button type="button" class="modeBtn kid" data-mode="kid">🧸<br>ようじ</button>
+      <button type="button" class="modeBtn adult" data-mode="adult">🔥<br>おとな</button>
+    </div>
+    <div class="small hint" id="hint">おとなモードは 💣 に さわっちゃだめ！</div>
+  </div>
+
+  <div id="over">
+    <div class="big">おしまい！</div>
+    <div id="newRecord" hidden>🎉 しんきろく！ 🎉</div>
+    <div class="result"><span id="overScore">⭐ 0</span></div>
+    <div class="result best"><span id="overBest">🏆 0</span></div>
+    <div class="result time"><span id="overCombo">🔥 0</span></div>
+    <button id="retry" type="button">もういっかい</button>
+    <button id="change" type="button">モードをかえる</button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

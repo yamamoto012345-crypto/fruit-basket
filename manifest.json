@@ -1,0 +1,16 @@
+{
+  "name": "くだものキャッチ",
+  "short_name": "くだもの",
+  "description": "うえから おちてくる くだものを タッチ！ したに おちる まえに とろう",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#e8ffe0",
+  "theme_color": "#7bd957",
+  "lang": "ja",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
